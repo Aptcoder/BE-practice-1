@@ -19,5 +19,11 @@ export default {
   cli: {
     migrationsDir: 'src/migrations',
     entitiesDir: 'src/entities'
-  }
+  },
+  seeds: [
+    'src/seeds/*.ts'
+  ],
+  factories: [
+    'src/seeds/factories/**/*.ts'
+  ]
 };
