@@ -1,0 +1,38 @@
+version: "3"
+services:
+  api:
+    build: .
+    command: npm run start
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+    ports:
+      - "3000:3000"
+
+  redis:
+    image: redis:7.0.12-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
+      - MYSQL_DATABASE=kredi
+    ports:
+      - 3307:3306
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
+  cache:
+    driver: local
